@@ -1,0 +1,131 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Game_On.Data.Context;
+using Game_On.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Game_On.ViewModels
+{
+    public partial class ConnexionVM : ObservableObject
+    {
+        private readonly ModelContext context;
+        public ConnexionVM()
+        {
+            this.context = new ModelContext();
+        }
+
+        [ObservableProperty]
+        private string pseudo = "";
+
+        [ObservableProperty]
+        private string motDePasse = "";
+
+        [ObservableProperty]
+        private Utilisateur? utilisateurAuthentifie = null;
+
+        [ObservableProperty]
+        private string messageConnexion = "";
+
+        [ObservableProperty]
+        private bool dejaConnecte;
+
+        [RelayCommand]
+        public async Task Connexion()
+        {
+            if (dejaConnecte) { return; }
+
+            try
+            {
+                DejaConnecte = true;
+                messageConnexion = "";
+
+                //je recupere les infos des utilisateur et tenant compte des relations
+                var utilisateursAvecRelations = context.Utilisateur.Include("Entreprise").Include("Departement");
+
+                var utilisateurRecherché = from utilisateurCourant in utilisateursAvecRelations
+                                           where utilisateurCourant.Pseudo == Pseudo
+                                           select utilisateurCourant;
+
+                //  var utilisateur = await utilisateurRecherché.ToListAsync(); je laisse dabord ceci, je vais essayer demander
+                //  à quelqun , soit Lina soit moi de gerer lunicité du pseudo
+
+                Utilisateur? utilisateurTrouvé = await utilisateurRecherché.FirstOrDefaultAsync();
+                //Utilisateur? utilisateurTrouvé = null;
+                if (utilisateurTrouvé == null)
+                {
+                    MessageConnexion = "Désolé, nous n'avons trouvé aucun tilisateur.";
+                    //  UtilisateurAuthentifie = null; // 
+                    DejaConnecte = false;
+                    return;
+                }
+
+                if (utilisateurTrouvé.MotDePasse != MotDePasse)
+                {
+                    MessageConnexion = "Mot de passe incorrect.";
+                    DejaConnecte = false;
+                    return;
+                }
+
+                utilisateurTrouvé.LoginTime = DateTime.Now;
+                context.Utilisateur.Update(utilisateurTrouvé);
+                await context.SaveChangesAsync();
+                UtilisateurAuthentifie = utilisateurTrouvé;
+                MessageConnexion = "Connexion réussie.";
+                DejaConnecte = true;
+
+                await VerifierEtGenererSudokusQuotidiens();
+            }
+            catch (Exception ex)
+            {
+                MessageConnexion = $"Erreur lors de la connexion : {ex.Message}";
+                DejaConnecte = false;
+                utilisateurAuthentifie = null;
+            }
+
+        }
+
+<<<<<<< HEAD
+        [RelayCommand]
+
+        public async Task Deconnexion()
+        {
+            UtilisateurAuthentifie.LogoutTime = DateTime.Now;
+            DejaConnecte = false ;
+
+        }
+
+     
+=======
+        private async Task VerifierEtGenererSudokusQuotidiens()
+        {
+            DateTime aujourdhui = DateTime.Today;
+            apiRecuperateur api = new apiRecuperateur();
+
+            string[] difficultes = { "Easy", "Medium", "Hard" };
+
+            foreach (string difficulte in difficultes)
+            {
+                var sudokuExistant = await context.Sudoku
+                    .FirstOrDefaultAsync(s => s.Date.Date == aujourdhui && s.Difficulte == difficulte);
+
+                if (sudokuExistant == null)
+                {
+                    var nouveauSudoku = await api.GetApiData(difficulte);
+
+                    if (nouveauSudoku != null)
+                    {
+                        context.Sudoku.Add(nouveauSudoku);
+                    }
+                }
+            }
+            await context.SaveChangesAsync();
+        }
+>>>>>>> Sprint2/vuemodel_sudoku_api
+    }
+}

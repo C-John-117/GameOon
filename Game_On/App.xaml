@@ -1,0 +1,81 @@
+﻿<Application x:Class="Game_On.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Game_On"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             StartupUri="Views/FenetrePrincipale.xaml">
+    <Application.Resources>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" Opacity="0.3"/>
+        <!-- 🎨 Palette de couleurs Material-like -->
+        <SolidColorBrush  x:Key="PrimaryColor">#6200EE</SolidColorBrush>
+        <SolidColorBrush  x:Key="PrimaryVariant">#3700B3</SolidColorBrush>
+        <SolidColorBrush  x:Key="SecondaryColor">#03DAC6</SolidColorBrush>
+        <SolidColorBrush  x:Key="ErrorColor">#B00020</SolidColorBrush>
+        <SolidColorBrush  x:Key="SurfaceColor">#FFFFFF</SolidColorBrush>
+        <SolidColorBrush  x:Key="BackgroundColor">#F6F6F6</SolidColorBrush>
+        <SolidColorBrush  x:Key="TextColor">#1C1B1F</SolidColorBrush>
+
+        <!-- 🧱 Style des boutons Material -->
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.25"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            CornerRadius="10"
+                            SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource PrimaryVariant}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource SecondaryColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ✏️ Style pour TextBox du Sudoku -->
+        <Style TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
+            <Setter Property="BorderBrush" Value="#DDD"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="3" ShadowDepth="1" Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="6" ShadowDepth="0" Color="#6200EE" Opacity="0.5"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Application.Resources>
+</Application>

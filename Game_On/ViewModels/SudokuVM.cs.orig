@@ -1,0 +1,183 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Game_On.Data.Context;
+using Game_On.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Windows;
+
+public partial class SudokuVM : ObservableObject
+{
+    private readonly ModelContext context = new ModelContext();
+    private CoupScanner _scanner;
+    private Sudoku? sudoku = new Sudoku();
+    Partie? partieUser = new Partie();
+
+    [ObservableProperty]
+    private string _puzzle = new string('0', 81);
+
+    public string OriginalPuzzle { get; private set; } = new string('0', 81);
+    public SudokuVM()
+    {
+        _scanner = new CoupScanner(_puzzle);
+
+      //  _ = InitializeAsync();
+
+    }
+
+    public Task<Sudoku?> FindSudokuByPuzzleAsync(string originalPuzzle)
+        => context.Sudoku.FirstOrDefaultAsync(s => s.Puzzle == originalPuzzle);
+
+    public async Task InitializeAsync(string difficultéChoisie, int userId)
+    {
+        try
+        {
+            // 1) Sudoku du jour
+            sudoku = await GetDailyLevel(difficultéChoisie);
+
+<<<<<<< HEAD
+            sudoku = await GetDailyLevel("Medium");
+
+            if (sudoku != null)
+=======
+            if (sudoku == null)
+                return;
+
+            OriginalPuzzle = sudoku.Puzzle;
+>>>>>>> Spring4/CCreationParti_Niveau
+
+            // 2) Chercher une sauvegarde pour ce user + ce sudoku
+            var partie = await context.Partie
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.UtilisateurId == userId
+                                       && p.SudokuId == sudoku.Id);
+
+            if (partie != null && !string.IsNullOrEmpty(partie.Save))
+            {
+<<<<<<< HEAD
+
+                OriginalPuzzle = sudoku.Puzzle;  // capture définitive du puzzle d’origine
+
+                Puzzle = sudoku.Puzzle;          // affiche dans l’UI
+
+=======
+                // ✅ Reprendre la partie sauvegardée
+                Puzzle = partie.Save.PadRight(81, '0'); // au cas où
+            }
+            else
+            {
+                // ✅ Pas de sauvegarde → partir du puzzle d'origine
+                Puzzle = sudoku.Puzzle;
+>>>>>>> Spring4/CCreationParti_Niveau
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex);
+            // tu peux aussi faire un MessageBox en cas d'erreur si tu veux
+        }
+    }
+
+
+    partial void OnPuzzleChanged(string value)
+        => _scanner = new CoupScanner(value);
+
+    private async Task<Sudoku?> GetDailyLevel(string difficulte)
+    {
+        var today = DateTime.Today;
+
+        return await context.Sudoku
+
+            .Where(s => s.Date >= today && s.Date < today.AddDays(1) && s.Difficulte == difficulte)
+
+            .Select(s => s)
+
+            .FirstOrDefaultAsync();
+
+    }
+
+    public async Task AddScore(int userId)
+    {
+        var requetePartie = from partie in context.Partie.AsNoTracking()
+<<<<<<< HEAD
+                            where partie.SudokuId == sudoku.Id
+                            && partie.UtilisateurId == userId
+=======
+                            where partie.SudokuId == sudoku.Id && partie.UtilisateurId == userId
+>>>>>>> Spring4/CCreationParti_Niveau
+                            select partie;
+
+        partieUser = await requetePartie.FirstOrDefaultAsync();
+
+        if (partieUser != null)
+        {
+            partieUser.DateFin = DateTime.Now;
+
+            TimeSpan duree = partieUser.DateFin - partieUser.DateDebut;
+
+            int score = 1 / ((int)duree.TotalSeconds) * 100;
+
+            switch (sudoku.Difficulte)
+            {
+                case "Easy":
+                    score *= 1;
+                    break;
+
+                case "Medium":
+                    score *= 2;
+                    break;
+
+                case "Hard":
+                    score *= 4;
+                    break;
+
+                default:
+                    break;
+            }
+
+            context.Partie.Update(partieUser);
+
+            var requeteUser = from utilisateur in context.Utilisateur.AsNoTracking()
+<<<<<<< HEAD
+                                where utilisateur.Id == userId
+                                select utilisateur;
+=======
+                              where utilisateur.Id == userId
+                              select utilisateur;
+>>>>>>> Spring4/CCreationParti_Niveau
+
+            Utilisateur? user = await requeteUser.FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                MessageBox.Show("une erreur c'est prooduite lors de la sauvegarde", "Erreur Serveur", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            user.Score = score;
+
+            context.Utilisateur.Update(user);
+
+            await context.SaveChangesAsync();
+        }
+<<<<<<< HEAD
+    }
+
+=======
+
+
+        partieUser = new Partie();
+
+        partieUser.DateDebut = DateTime.Now;
+        partieUser.SudokuId = sudoku.Id;
+        partieUser.UtilisateurId = userId;
+        partieUser.Save = Puzzle; // Tanguy va modifier pour que on fasse la bonne sauvegarde 
+        // enregistrement de la nouvelle partie
+        context.Partie.Add(partieUser);
+        await context.SaveChangesAsync();
+        
+
+    }
+
+
+
+>>>>>>> Spring4/CCreationParti_Niveau
+}

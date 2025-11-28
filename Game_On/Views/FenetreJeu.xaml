@@ -1,0 +1,136 @@
+﻿<UserControl x:Class="Game_On.Views.FenetreJeu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Game_On.Views"
+             Background="{StaticResource BackgroundColor}"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <DockPanel LastChildFill="True" Margin="10">
+
+        <Button x:Name="btn_Retour"
+                DockPanel.Dock="Top"
+                HorizontalAlignment="Left"
+                Height="40" Width="40"
+                Margin="10,10,0,10"
+                Click="btn_Retour_Click">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="20">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+            ←
+        </Button>
+
+        <Border Background="{StaticResource SurfaceColor}"
+                CornerRadius="20"
+                Padding="20"
+                Effect="{DynamicResource CardShadow}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Viewbox Grid.Row="0" Stretch="Uniform" Margin="10">
+                    <Grid x:Name="SudokuGrid"/>
+                </Viewbox>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" 
+                            HorizontalAlignment="Center" Margin="0,20,0,0">
+                    
+                    <Button x:Name="BtnNote"
+                            Content="✏️ Mode Note"
+                            Width="220" Height="45"
+                            Click="BtnNote_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <StackPanel DockPanel.Dock="Right"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical"
+                    Margin="10">
+
+            <Border BorderBrush="#FF2F4858"
+                    BorderThickness="2"
+                    CornerRadius="8"
+                    Padding="12"
+                    Width="220"
+                    Background="#FFEFF6FF"
+                    Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Mode"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding Mode}"
+                               FontSize="20"
+                               HorizontalAlignment="Center"
+                               Margin="0,8,0,0" />
+                </StackPanel>
+            </Border>
+
+            <Border BorderBrush="#FF2F4858"
+                    BorderThickness="2"
+                    CornerRadius="8"
+                    Padding="12"
+                    Width="220"
+                    Background="#FFEFF6FF"
+                    Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Difficulté"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding Difficulte}"
+                               FontSize="20"
+                               HorizontalAlignment="Center"
+                               Margin="0,8,0,0" />
+                </StackPanel>
+            </Border>
+
+            <Border BorderBrush="#FF2F4858"
+                    BorderThickness="2"
+                    CornerRadius="8"
+                    Padding="12"
+                    Width="220"
+                    Background="#FFEFF6FF"
+                    Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Durée de jeu"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center" />
+                    <TextBlock x:Name="TimerTextBlock"
+                               Text="00:00:00"
+                               FontSize="28"
+                               HorizontalAlignment="Center"
+                               Margin="0,8,0,0" />
+                </StackPanel>
+            </Border>
+
+            <Button x:Name="btn_Reset"
+                    Click="btn_Reset_Click"
+                    Content="Reset"
+                    Width="200" Height="45"/>
+            <Button x:Name="btn_Verification"
+                    Click="btn_Verif"
+                    Content="Verifier la solution"
+                    Width="200" Height="45"/>
+            <Button x:Name="BtnSolve"
+                    Content="⚡ Résoudre"
+                    Width="200" Height="45"
+                    Click="btn_Solve_Click"/>
+        </StackPanel>
+
+    </DockPanel>
+</UserControl>
