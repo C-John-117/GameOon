@@ -14,6 +14,12 @@
 
     <Grid Margin="20">
 
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Loaded">
+                <i:InvokeCommandAction Command="{Binding ChargerClassementSemaineAsyncCommand}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+
         <!-- TabControl Material -->
         <TabControl
             materialDesign:ColorZoneAssist.Mode="PrimaryDark"
@@ -58,27 +64,53 @@
                         <TabControl.ContentTemplate>
                             <DataTemplate>
 
-                                <DataGrid ItemsSource="{Binding 
-                                    DataContext.UtilisateurEntreprises,
-                                    RelativeSource={RelativeSource AncestorType=TabControl}}"
-                                          AutoGenerateColumns="False"
-                                          CanUserAddRows="False"
-                                          CanUserDeleteRows="False"
-                                          IsReadOnly="True"
-                                          HeadersVisibility="Column"
-                                          Margin="10"
-                                          RowHeight="40"
-                                          materialDesign:DataGridAssist.CellPadding="12"
-                                          materialDesign:DataGridAssist.ColumnHeaderPadding="10">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Center"
+                                                Margin="0,0,0,10">
+                                        <Button Content="⟵"
+                                                Width="40"
+                                                Margin="0,0,8,0"
+                                                Command="{Binding DataContext.SemainePrecedenteAsyncCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                        <TextBlock Text="{Binding DataContext.DebutSemaine, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat='{}{0:yyyy-MM-dd}'}"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,4,0" />
+                                        <TextBlock Text=" - "
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,4,0" />
+                                        <TextBlock Text="{Binding DataContext.FinSemaine, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat='{}{0:yyyy-MM-dd}'}"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,8,0" />
+                                        <Button Content="⟶"
+                                                Width="40"
+                                                Margin="0,0,8,0"
+                                                Command="{Binding DataContext.SemaineSuivanteAsyncCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                IsEnabled="{Binding DataContext.PeutAllerSemaineSuivante, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                    </StackPanel>
 
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="#" Binding="{Binding AlternationIndex}"/>
-                                        <DataGridTextColumn Header="Pseudo" Binding="{Binding Pseudo}"/>
-                                        <DataGridTextColumn Header="Departement" Binding="{Binding Departement.NomDepartement}"/>
-                                        <DataGridTextColumn Header="Score" Binding="{Binding Score}"/>
-                                    </DataGrid.Columns>
+                                    <DataGrid ItemsSource="{Binding DataContext.ClassementsEntrepriseSemaine, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                              AutoGenerateColumns="False"
+                                              CanUserAddRows="False"
+                                              CanUserDeleteRows="False"
+                                              IsReadOnly="True"
+                                              HeadersVisibility="Column"
+                                              Margin="10"
+                                              RowHeight="40"
+                                              materialDesign:DataGridAssist.CellPadding="12"
+                                              materialDesign:DataGridAssist.ColumnHeaderPadding="10">
 
-                                </DataGrid>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="#" Binding="{Binding Id}"/>
+                                            <DataGridTextColumn Header="Entreprise" Binding="{Binding Entreprise.NomEntreprise}"/>
+                                            <DataGridTextColumn Header="Pseudo" Binding="{Binding Utilisateur.Pseudo}"/>
+                                            <DataGridTextColumn Header="Score" Binding="{Binding Score}"/>
+                                            <DataGridTextColumn Header="Date" Binding="{Binding DateClassement, StringFormat='{}{0:yyyy-MM-dd}'}"/>
+                                        </DataGrid.Columns>
+
+                                    </DataGrid>
+                                </StackPanel>
 
                             </DataTemplate>
                         </TabControl.ContentTemplate>
@@ -117,24 +149,54 @@
                         <TabControl.ContentTemplate>
                             <DataTemplate>
 
-                                <DataGrid ItemsSource="{Binding 
-                                    DataContext.UtilisateurDepartement,
-                                    RelativeSource={RelativeSource AncestorType=TabControl}}"
-                                          AutoGenerateColumns="False"
-                                          IsReadOnly="True"
-                                          HeadersVisibility="Column"
-                                          Margin="10"
-                                          RowHeight="40"
-                                          AlternationCount="9999">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Center"
+                                                Margin="0,0,0,10">
+                                        <Button Content="⟵"
+                                                Width="40"
+                                                Margin="0,0,8,0"
+                                                Command="{Binding DataContext.SemainePrecedenteAsyncCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                        <TextBlock Text="{Binding DataContext.DebutSemaine, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat='{}{0:yyyy-MM-dd}'}"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,4,0" />
+                                        <TextBlock Text=" - "
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,4,0" />
+                                        <TextBlock Text="{Binding DataContext.FinSemaine, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat='{}{0:yyyy-MM-dd}'}"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,8,0" />
+                                        <Button Content="⟶"
+                                                Width="40"
+                                                Margin="0,0,8,0"
+                                                Command="{Binding DataContext.SemaineSuivanteAsyncCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                IsEnabled="{Binding DataContext.PeutAllerSemaineSuivante, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                    </StackPanel>
 
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="#" 
-                                            Binding="{Binding AlternationIndex}"/>
-                                        <DataGridTextColumn Header="Pseudo" Binding="{Binding Pseudo}"/>
-                                        <DataGridTextColumn Header="Score" Binding="{Binding Score}"/>
-                                    </DataGrid.Columns>
+                                    <DataGrid ItemsSource="{Binding DataContext.ClassementsDepartementSemaine, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                              AutoGenerateColumns="False"
+                                              CanUserAddRows="False"
+                                              CanUserDeleteRows="False"
+                                              IsReadOnly="True"
+                                              HeadersVisibility="Column"
+                                              Margin="10"
+                                              RowHeight="40"
+                                              materialDesign:DataGridAssist.CellPadding="12"
+                                              materialDesign:DataGridAssist.ColumnHeaderPadding="10">
 
-                                </DataGrid>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="#" Binding="{Binding Id}"/>
+                                            <DataGridTextColumn Header="Département" Binding="{Binding Departement.NomDepartement}"/>
+                                            <DataGridTextColumn Header="Entreprise" Binding="{Binding Entreprise.NomEntreprise}"/>
+                                            <DataGridTextColumn Header="Pseudo" Binding="{Binding Utilisateur.Pseudo}"/>
+                                            <DataGridTextColumn Header="Score" Binding="{Binding Score}"/>
+                                            <DataGridTextColumn Header="Date" Binding="{Binding DateClassement, StringFormat='{}{0:yyyy-MM-dd}'}"/>
+                                        </DataGrid.Columns>
+
+                                    </DataGrid>
+                                </StackPanel>
 
                             </DataTemplate>
                         </TabControl.ContentTemplate>

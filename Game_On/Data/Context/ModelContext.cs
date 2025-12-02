@@ -1,4 +1,5 @@
 ﻿using Game_On.Models;
+using Game_On.Views;
 using Microsoft.EntityFrameworkCore;
 
 namespace Game_On.Data.Context
@@ -13,6 +14,8 @@ namespace Game_On.Data.Context
         public DbSet<Sudoku> Sudoku { get; set; }
         public DbSet<Utilisateur> Utilisateur { get; set; }
         public DbSet<Gagnant> Gagnant { get; set; }
+
+        public DbSet<ClassementDate> ClassementDate { get; set; }
 
         public ModelContext()
         {
